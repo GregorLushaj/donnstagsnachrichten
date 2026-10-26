@@ -1,0 +1,47 @@
+# Pipeline configuration: Zurich–Basel market integration, 1740 to 1842
+# Read by scripts/run_all.py and every step 01 to 07.
+# All paths are relative to the project root. Change values only with an entry in the decision log (Q1).
+
+paths:
+  input:
+    zurich: data/input/zurich              # one csv per issue (DN, ZWB), 1730 to 1842
+    basel: data/input/basel                # weekly Basel prices from the Avis project (file to be clarified, F1)
+    chambru: data/input/chambru/prices_raw_public_use_zh.xlsx
+  intermediate: data/intermediate          # steps 01 to 04, hand coding
+  r_reference: data/intermediate/r_reference  # reference output zwb_merged (F8)
+  analysis: data/analysis                  # steps 05 to 07
+  figures: output/figures
+  tables: output/tables
+  values: output/values                    # key figures per step (NN.yml)
+  variables: _variables.yml                # merged by run_all.py, used via {{< var >}}
+  r_script: reference/donnerstagsnachrichten.R
+
+period:
+  start: "1730-01-01"
+  end: "1842-12-31"
+  prototype:                               # task 2.13, gate M2
+    start: "1735-01-01"
+    end: "1745-12-31"
+  twice_weekly_from: "1801-01-01"          # from here on: last quotation of the week (E06)
+
+week_axis:
+  definition: iso                          # Monday to Sunday; align with the Basel series (2.10, F1)
+
+base_good: kernen                          # spelt grain (Kernen)
+
+estimation:
+  lambda_base: 0.98                        # effective window of about 50 weeks
+  lambda_sensitivity: [0.96, 0.99]         # about 25 and 100 weeks
+  rolling_window_weeks: 52
+  lags_weeks: [-2, -1, 0, 1, 2]            # positive: Zurich follows Basel by k weeks
+  burn_in_weeks: null                      # set in 4.02; rho_t is not interpreted during burn-in
+  confidence_level: 0.95                   # bands via the Fisher transformation
+
+bootstrap:
+  seed: 1740
+  replications: 1000
+  block_length_weeks: null                 # set and justify in 4.03
+
+figures:
+  format: png
+  dpi: 300
