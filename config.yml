@@ -5,7 +5,9 @@
 paths:
   input:
     zurich: data/input/zurich              # one csv per issue (DN, ZWB), 1730 to 1842
-    basel: data/input/basel                # weekly Basel prices from the Avis project (file to be clarified, F1)
+    basel: data/input/basel                # Basel Avisblatt data from the Avis project (F1, partly clarified)
+    basel_prices: data/input/basel/tables/prices.csv  # one row per quotation; Kernen in Sack
+    basel_bread: data/input/basel/tables/bread.csv    # weekly bread price, for further goods (4.08)
     chambru: data/input/chambru/prices_raw_public_use_zh.xlsx
   intermediate: data/intermediate          # steps 01 to 04, hand coding
   r_reference: data/intermediate/r_reference  # reference output zwb_merged (F8)
@@ -14,7 +16,8 @@ paths:
   tables: output/tables
   values: output/values                    # key figures per step (NN.yml)
   variables: _variables.yml                # merged by run_all.py, used via {{< var >}}
-  r_script: reference/donnerstagsnachrichten.R
+  r_script: reference/donnstagsscripts_R/donnerstagsnachrichten.R
+  provenance: docs/provenance.yaml         # hand-filled, read by scripts/inventory.py (2.04)
 
 period:
   start: "1730-01-01"
@@ -41,6 +44,11 @@ bootstrap:
   seed: 1740
   replications: 1000
   block_length_weeks: null                 # set and justify in 4.03
+
+files:                                     # format of intermediate results, section 3.4 (2.05)
+  format: csv                              # written via src/datafiles.write_csv
+  encoding: utf-8                          # without BOM, LF line endings
+  date_format: "%Y-%m-%d"                  # ISO 8601
 
 figures:
   format: png

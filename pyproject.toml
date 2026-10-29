@@ -28,7 +28,8 @@ dev = [
 package = false
 
 [tool.pytest.ini_options]
-python_files = ["test_*.py", "testcases.py"]
+python_files = ["test_*.py"]
+pythonpath = ["."]
 
 [tool.ruff]
 respect-gitignore = true

@@ -17,3 +17,8 @@ output/
 .idea/
 _variables.yml
 _output/
+
+# Provided data inside reference/ (agreement, section 2): only the R code is versioned
+reference/**/*.rds
+reference/**/*.csv
+.Rproj.user/

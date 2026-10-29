@@ -1,0 +1,78 @@
+# Provenance of the input data (task 2.04), filled in by hand.
+# Read by scripts/inventory.py, which checks the fields and writes the README tables
+# "Data Availability and Provenance" and "Dataset list" to output/tables/.
+# path_key points to paths in config.yml, so paths are defined only there.
+# Metadata only, no extracts of the provided data (agreement, sections 2 and 3).
+# date_obtained: YYYY-MM-DD; empty fields are reported as "to fill in".
+# open: points still to confirm; reported until the list is removed.
+
+sources:
+  - name: Donnstags-Nachrichten, Donnstags-Blatt, Zürcherisches Wochenblatt (files DN and ZWB), 1730 to 1842
+    path_key: input.zurich
+    format: >-
+      csv (UTF-8), one file per issue, named DN or ZWB plus date YYYYMMDD, supplements with suffix _b;
+      columns date, page, text, type, category, continuation; one row per advertisement;
+      7,986 files (3,655 DN, 4,331 ZWB), 7,977 issues (scripts/inventory.py)
+    source: Research Lab Donnstags-Nachrichten, University of Zurich, course folder on OLAT
+    date_obtained: 2026-10-15
+    access: >-
+      via the supervisors; research data use agreement, sections 1 to 5 (Appendix D of the project documentation,
+      docs/daten_agreement.pdf); not included in the package
+    citation:  # not listed in Table 1 of the agreement; question F9 to Jakob Metzler
+
+  - name: Basel Avisblatt price quotations (Avis project), prices.csv
+    path_key: input.basel_prices
+    format: >-
+      csv (UTF-8), one row per quotation, 1729-03-22 to 1844-12-30; columns id (issue UUID/aN),
+      published, created, price, article, unit, quality, type (market or fixed), valid_from, valid_to;
+      Kernen always in Sack
+    source: >-
+      Avis project "Märkte auf Papier", University of Basel (SNSF grant 100011_182156), avisblatt.github.io;
+      GitHub repository github.com/avisblatt/avisdata, folder tables/; version 1.0.0 of 2023-08-24 on Zenodo
+      (tables/prices.csv and tables/bread.csv identical to the Zenodo archive, SHA-256 checked on 2026-10-29)
+    date_obtained: 2026-07-28  # day of group meeting 4; data version: Zenodo 1.0.0, 2023-08-24
+    access: >-
+      public, CC BY-NC-SA 4.0 (data/input/basel/LICENSE and Zenodo record; the note "CC-BY-SA 4.0" in
+      CITATION.cff is overridden by the stricter licence); not included in the package
+    citation: >-
+      Burghartz, S., Bannert, M., Dickmann, L., Decker, E., Engel, A., Reimann, A. and Serif, I. (2023),
+      Raw and Processed Data of Printed Markets – The Basel Avisblatt (1729-1845), version 1.0.0, Zenodo,
+      doi:10.5281/zenodo.8278751
+    open:
+      - currency of price; week definition (published or created); meaning of type fixed (F1)
+
+  - name: Basel Avisblatt bread prices (Avis project), bread.csv
+    path_key: input.basel_bread
+    format: >-
+      csv (UTF-8), one row per week, 1729-03-22 to 1844-12-30; columns published, price,
+      type (calculated or fixed)
+    source: same repository as prices.csv, folder tables/; identical to Zenodo version 1.0.0 of 2023-08-24
+    date_obtained: 2026-07-28  # data version: Zenodo 1.0.0, 2023-08-24
+    access: public, CC BY-NC-SA 4.0; not included in the package
+    citation: as for prices.csv
+    open:
+      - unit, currency and how the calculated values are derived
+
+  - name: Price database Chambru et al. (2026), prices_raw_public_use_zh.xlsx
+    path_key: input.chambru
+    format: >-
+      xlsx, sheets data (long format, 23 variables, e.g. year, month, day, commodity_standardized,
+      price_standardized, currency_standardized, quantity_unit_standardized, source), dictionary
+      (variable descriptions) and readme; prices for the canton of Zurich, 1700 to 1870
+    source: SNSF project Measuring Economic Growth and Welfare in 19th Century Switzerland, via the supervisors
+    date_obtained: 2026-10-15
+    access: >-
+      research data use agreement, sections 1 to 5 (Appendix D of the project documentation,
+      docs/daten_agreement.pdf); not included in the package
+    citation: >-
+      Chambru, C., Baltensperger, M., Hediger, S., Metzler, J. and Woitek, U. (2026), Datenbank,
+      SNSF project Measuring Economic Growth and Welfare in 19th Century Switzerland
+      (Table 1 and references of the agreement; identical in the readme sheet of the file)
+
+  - name: Course R script donnerstagsnachrichten.R
+    path_key: r_script
+    format: R script, text reference only, not executed (E15)
+    source: Research Lab Donnstags-Nachrichten, course material
+    date_obtained: 2026-10-15
+    access: course material; in the repository, not in the package
+    citation:  # not listed in Table 1 of the agreement; question F9 to Jakob Metzler
