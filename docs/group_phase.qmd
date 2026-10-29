@@ -1,0 +1,258 @@
+---
+title: "Group Phase: Meeting Notes"
+subtitle: "WP0, 7 July to 18 August 2026 (task 2.09)"
+author: "Gregor Lushaj"
+date: last-modified
+format:
+  html:
+    toc: true
+---
+
+This file secures the material from the group phase for the essay (task 2.09).
+For each meeting it records the content and my own contribution in two to three
+sentences, so it can be used directly when planning the essay (task 5.01). Slides,
+assignments and exports are stored outside the repository, since they contain data.
+
+# Meetings
+
+## Meeting 1 — 7 July 2026: Introduction
+
+**Content.** Formal questions about the lab were clarified and the project was
+presented in a short overview. As preparation we were asked to read one complete
+issue of the Donnstags-Nachrichten, think about which aspects could be quantified,
+and look at the Avisblatt project (Printed Markets, University of Basel).
+
+**Own contribution.** I read the 1799 volume and summarised the first page of
+advertisements, then derived five ideas for quantitative measures (price series,
+market activity, seasonality, structural breaks, spatial distribution). I also
+reviewed the Avisblatt pipeline and noted which of its design choices transfer to
+our project (see [Preparation notes](#preparation-notes)).
+
+## Meeting 2 — 17 July 2026: Digitisation pipeline and text line recognition
+
+**Content.** After a short discussion of our close reading of one issue, the
+digitisation pipeline was presented: visual segmentation of the pages and automatic
+text line recognition. The first assignment was to create training material for the
+text line recognition in Label Studio.
+
+**Own contribution.** I corrected 20 text columns in Label Studio and sent the JSON
+and COCO exports to Jakob Metzler by the 23 July deadline. I also raised two research
+ideas: analysing *who* sells *what*, and a difference-in-differences design around the
+Battle of Zurich (1799) based on the goods advertised.
+
+## Meeting 3 — 20 July 2026: Large language models and generative AI
+
+**Content.** Ways of using generative AI, training and test data, measuring success
+rates, prompting, and cost. The assignment for the following week was to try out
+text structuring with generative AI: splitting the recognised text of an issue into
+section headers and individual advertisements and assigning each a category.
+
+**Own contribution.** I ran the structuring fully locally with Ollama and compared
+three strategies on a training sample of 5 issues and a held-out test sample of 10
+issues of the Zürcher Wochenblatt (1801–1842, seed 20260710): (A) *direct*, one call
+per issue with Gemma 4 12B (`gemma4:12b-it-qat`); (B) *verified*, rule-based
+pre-segmentation where only uncertain sections and a final audit go to the same model;
+and (C) *rules only*, the same pipeline without any model call. On the test sample,
+strategy B performed best with an F1 of 0.84 for segmentation and category together,
+against 0.47 for A and 0.67 for C; the monetary cost was zero, and the runtime about
+19 minutes for 10 issues (B) compared with 29 minutes (A).
+
+Own evaluation against the structured reference files of the course, at advertisement
+level (a predicted advertisement counts as correct if its text matches a reference
+advertisement with at least 90% similarity; "+ category" also requires the same
+category):
+
+| Strategy     | Sample    | Ads (ref. / pred.) | F1 segmentation | F1 + category | Model calls | Tokens in / out  | Runtime |
+|--------------|-----------|-------------------:|----------------:|--------------:|------------:|-----------------:|--------:|
+| A direct     | train (5) |          575 / 625 |            0.64 |          0.47 |           5 |  94,671 / 14,975 |  19 min |
+| B verified   | train (5) |          575 / 592 |            0.87 |          0.87 |          22 |   87,516 / 9,180 |  13 min |
+| C rules only | train (5) |          575 / 513 |            0.71 |          0.71 |           0 |                – |       – |
+| A direct     | test (10) |          970 / 960 |            0.69 |          0.47 |          10 | 149,336 / 23,150 |  29 min |
+| B verified   | test (10) |          970 / 958 |            0.84 |          0.84 |          40 | 134,316 / 13,447 |  19 min |
+| C rules only | test (10) |          970 / 842 |            0.68 |          0.67 |           0 |                – |       – |
+
+Settings: context window 32k tokens (A) and 16k (B), thinking off, output limit 8,192
+(A) and 4,096 tokens (B). The table shows the second version of the prompts (v2); the
+first version (v1, training sample only) gave practically the same values. The lesson
+for the project: letting rules do the segmentation and using the model only where the
+rules are uncertain is both more accurate and cheaper than handing the whole issue to
+the model.
+
+## Meeting 4 — 28 July 2026: Text as data
+
+**Content.** Text as data: selection and representation of texts, reducing
+complexity, the bag-of-words model, the document-feature matrix and TF-IDF weighting.
+The course uses the R package quanteda, with Grimmer, Roberts and Stewart (2022) as
+the main reading.
+
+**Own contribution.** I took part in the session and noted the quanteda tutorials and
+the reading list as follow-up tasks. These methods are the basis for the dictionary
+approach to the rubrics in my own project.
+
+## Meeting 5 — 4 August 2026: Business cycle analysis
+
+**Content.** Introduction to the analysis of business cycle fluctuations. Preparation
+was a working Python installation with Jupyter Notebook and a refresher of linear
+algebra (Mathematics II). The assignment for the following week was to translate the
+provided Python code to R with the help of AI.
+
+**Own contribution.** I set up Python and Jupyter, worked through the session material,
+and translated the Python code to R with the help of AI.
+
+## Meeting 6 — 11 August 2026: Impulse response functions
+
+**Content.** The first half covered impulse response functions; the second half
+showed how to load the Donnstags-Nachrichten into R. The Python Data Science Handbook
+(VanderPlas) was recommended as an introduction to pandas, NumPy and Matplotlib.
+
+**Own contribution.** I took part in the session and loaded the Donnstags-Nachrichten
+into R with the course script, the starting point for the data import in my own project.
+
+## Meeting 7 — 18 August 2026: Turning points and classification
+
+**Content.** The first half covered dating turning points with the Bry–Boschan
+algorithm; the second half covered dictionaries and classification with large
+language models.
+
+**Own contribution.** I took part in the session. Bry–Boschan dating and
+dictionary-based classification are the methods I build on in my own project.
+
+# Timeline
+
+| Date       | Activity                                                                 |
+|------------|--------------------------------------------------------------------------|
+| 07.07.2026 | Meeting 1 (organisational)                                               |
+| 16.07.2026 | Worked through the open to-dos before meeting 2                          |
+| 17.07.2026 | Meeting 2                                                                |
+| 20.07.2026 | Meeting 3; filled in and submitted the 6 ECTS registration form          |
+| 21.07.2026 | Worked on the annotation assignment; completed the form and sent it to Sonja Verel |
+| 27.07.2026 | Finished the annotation assignment and downloaded the exports            |
+| 28.07.2026 | Meeting 4                                                                |
+| 04.08.2026 | Meeting 5                                                                |
+| 11.08.2026 | Meeting 6                                                                |
+| 18.08.2026 | Meeting 7                                                                |
+
+# Tasks
+
+From meeting 1:
+
+- [x] Keep a log of the work done on the research project, for reproducibility (relevant for the final thesis) ✅ 2026-07-21
+- [x] Read one complete issue of the Donnstags-Nachrichten and consider which aspects are interesting and how to quantify them (links to the issues are in the slides) ✅ 2026-07-16
+- [x] Look at the Avisblatt project page ([avisblatt.ch](http://avisblatt.ch)); the digitisation pipeline is presented on Friday ✅ 2026-07-21
+
+From meeting 2:
+
+- [x] Send the registration form to Sonja Verel by Monday evening ✅ 2026-07-21
+- [x] Send the Label Studio annotations to Jakob Metzler by Thursday, 23 July: on the project page, click *Export*, download the first JSON export and the *COCO with Images* export, and send the `project` JSON and the `.zip` file (the JSON alone is enough if the `.zip` is too large) ✅ 2026-07-24
+
+From meeting 3:
+
+- [ ] Run Jakob's script locally and experiment with it (fully local, no cost)
+
+From meeting 4:
+
+- [ ] Work through the tutorials on [quanteda.io](https://quanteda.io/index.html)
+- [ ] Skim at least chapters 2–5, 10 and 15–21 of Grimmer, Roberts and Stewart (2022), *Text as Data: A New Framework for Machine Learning and the Social Sciences*
+
+From meeting 5:
+
+- [x] Install Python with Jupyter Notebook and refresh linear algebra (Mathematics II)
+- [x] Translate the provided Python code to R with the help of AI
+
+# Preparation notes
+
+## Reading a complete issue
+
+I read the [1799 volume](https://www.e-rara.ch/zuz/content/titleinfo/16346607) on
+e-rara. The first page of advertisements contains, in modern terms:
+
+1. Extra-aged kirsch at 1 gulden 30 schilling and 2 gulden; only a few measures left, available at the "Kamel".
+2. French liqueur and Mannheim water (a scented water) freshly arrived at Heinrich Notz, auf der Platte near Zurich; cheaper by the bottle, half dozen or dozen.
+3. Leather shoes for women and children from Eberhard, shoemaker at the Augustinertor: women's shoes 1 gl. 30 s. to 2 gl. 18 s., children's shoes 38 s. to 1 gl. 28 s.
+4. A wine press in good condition, suitable for about three to four harvests.
+5. *Histoire universelle* (14 vols.) and *Histoire moderne* (22 vols.), quarto, new, with index; price and location from the Berichthaus.
+6. A well-kept French horn with D-sharp and C crooks and mouthpieces, at a low price.
+7. Good red potatoes from Waser, shoemaker in the Schmalzgrube.
+8. Guinea fowl (or similar), various ornamental birds, one squirrel.
+9. A felt boot and a pair of polished boots from Stolz in the Niederdorf, at the "Paradiesvogel".
+10. White and dyed thread at various prices from Mrs Escher, Petershofstatt no. 160.
+11. A men's fur coat covered with green camlet (wool cloth).
+12. A long list of second-hand furniture, household goods and clothing from Joh. Heinrich Eichholzer, vordere Schipfe, "Wohlleben" (walnut chests and cupboards, chairs, mattresses, tables, an iron stove, cradles, copper kettles, sledges, spinning wheels, tea urns, waffle irons, men's and women's clothing), offered both for sale and as a buyer.
+13. Red Burgundy wine at graded prices: 26 s. per bottle, 3 gl. 30 s. per half ohm, 7 gl. 8 s. per ohm, and quantity prices for 25, 50 and 100 bottles; at the "Weisse Kette" no. 220, vordere Schipfe.
+
+### What can be measured?
+
+1. **Price series of recurring, homogeneous goods.** Goods such as wine, grain,
+   firewood, potatoes and oil probably appear weekly or at least regularly. This is
+   the basis for a historical price index, built bottom-up from advertisements
+   instead of official surveys, analogous to a CPI.
+2. **Market activity as a frequency or volume signal.** Number of advertisements per
+   issue, ratio of offers to requests, share of luxury versus basic goods, number of
+   distinct sellers. This is essentially a diffusion index or activity measure, closer
+   to an economic pulse than to prices.
+3. **Seasonality.** With 52 issues per year, seasonal patterns (harvest-dependent
+   goods, Christmas trade) can be estimated cleanly. This is needed anyway to separate
+   the business cycle from the season.
+4. **Structural breaks across years.** Wars, harvest failures and trade embargoes;
+   with several volumes, regime changes can be identified.
+5. **Spatial distribution.** If seller locations (Zurich, surrounding municipalities)
+   are recorded, a spatial dimension can be added.
+
+## The Avisblatt project
+
+[Printed Markets](https://avisblatt.github.io/) (University of Basel, Department of
+History, led by Prof. Susanna Burghartz, SNSF-funded 2019–2023) is a close analogue
+to our project. It digitised the Basler Avisblatt (1729–1845), Switzerland's first
+advertising newspaper: 118 volumes, 51,836 scanned pages and about 932,000 records of
+advertisements and announcements.
+
+### Pipeline
+
+Source: [technical documentation](https://avisblatt.philhist.unibas.ch/media/uploads/files/Technical_documentation_Avisblatt-Project_Burghartz_et_al.pdf).
+
+1. **Scanning** with a book scanner (Cobra A2); missing pages detected by comparing
+   two redundant holdings (University Library and State Archives).
+2. **Structuring in Freizo** (MongoDB-based) into the hierarchy volume → page →
+   issue → advertisement. Issues were first marked manually in Mirador (header and date).
+3. **Manual ground truth** for four volumes (1734, 1754, 1774, 1834): all
+   advertisements segmented and classified by hand before training any automation.
+   The key idea is not to annotate everything, but to annotate representative sample
+   years completely and automate the rest.
+4. **Handwritten text recognition in Transkribus** with two separate models for the
+   18th and 19th centuries, since the typefaces changed; character error rate below 2%.
+5. **Automatic segmentation** of advertisement boundaries with dhSegment, trained on
+   the ground-truth boxes and corrected manually afterwards.
+6. **Post-processing in R with quanteda:** dictionary- and regex-based tagging
+   ("tagfilter"), named entity recognition for persons and places (Python, flair),
+   language detection, and detection of duplicates and reprints.
+7. **Publication** as open data via GitHub, Zenodo and CRAN, with a searchable web
+   front end, following the FAIR principles.
+
+### Relevance for our project
+
+To select the ground-truth years, the team defined yearly dummy variables: a price
+jump year (grain price at least 25% above the previous year), a price drop year (at
+least 20% below), an abnormal price level (±25% / 20% from the seven-year mean), an
+epidemic year, and a political or economic crisis year. The dummies ensured the
+sample contained neither only normal nor only crisis years. This transfers to our
+project in four ways:
+
+- **Grain price as the lead indicator.** We could likewise choose one central price
+  (bread, wine, potatoes) as an anchor series to calibrate business cycle swings.
+- **Event dummies instead of full price indices.** A simpler but robust alternative
+  to full index construction: set binary indicators for unusual periods per year or
+  issue and regress advertising activity on them.
+- **Stratified sampling instead of a full census.** With around 600 pages per year,
+  digitise selected years or periods completely and sample in between; the selection
+  logic (avoiding a sample that happens to hit only crisis years) carries over directly.
+- **Reprint detection.** About three quarters of all advertisements were reprinted in
+  the following issue. Without deduplication, an activity series based on advertisement
+  counts would be biased upwards, overstating economic activity.
+
+# References
+
+Grimmer, J., Roberts, M. E. and Stewart, B. M. (2022), *Text as Data: A New Framework
+for Machine Learning and the Social Sciences*, Princeton: Princeton University Press.
+
+VanderPlas, J. (2016), *Python Data Science Handbook: Essential Tools for Working with
+Data*, Sebastopol: O'Reilly Media.
